@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Ice Cream Shop</title>
+        <style>
+          table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 200;
+          }
+          
+          td, th {
+            border: 2px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #dddddd;
+          }
+
+          
+          * {
+              box-sizing: border-box;
+            }
+
+           
+          .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 700px; 
+          }
+
+          .headercolumn {
+            float: left;
+            width: 50%;
+            color: white;
+            background-color:#4CAF50;
+            padding-left: 10px;
+            padding-right: 10px;
+            height: 60px;
+            vertical-align: middle;
+          }
+
+          .row2-column {
+            float: left;
+            width: 315px;
+            padding: 20px;
+            height: 500px; 
+            border-color: #aaa;
+            margin: 3px;
+           
+          }
+
+          .row1{
+            height: 100px;
+           }
+
+          .row:after {
+            content: "";
+            display: table;
+            clear: both;
+           }
+
+           .combo {
+              font-family: arial, sans-serif;
+              font-size: larger;
+              border-collapse: collapse;
+              height: 180px;
+              position: absolute;
+              background-color: #f9f9f9;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+              z-index: 1;
+           }
+            .header {
+              background-color:#4CAF50;
+              margin: 1ps;;
+              height: 60px
+            }
+
+          .button {
+             background-color: #4CAF50;
+             border: none;
+             color: white;
+             padding: 15px 32px;
+             text-align: center;
+             text-decoration: none;
+             display: inline-block;
+             font-size: 16px;
+             margin: 10px 10px;
+             cursor: pointer;
+          }
+
+          .bottom {
+            vertical-align: text-bottom;
+          }
+
+         </style>
+    </head>
+    
+    <body>
+        
+        <div  >
+            <div class = "headercolumn"  style = "vertical-align: middle;">
+                <h2 > Revature Ice Cream Shop</h2>
+            </div>
+           <div class = "headercolumn" class=" bottom" style ="text-align: right;" >
+               
+             <p>welcome : <span id ="spanUserName"> </span></p>
+            </div>
+        </div>
+       
+        <div class="row">
+          <div class="column"  style="background-color:#aaa;">
+            
+            <div class ="row1"  style="background-color:#bbb;">
+              
+              <h3> Stay here or to go:</h3>
+                
+               <select  id="Stay"  size = 2  multiple>
+                 <option value="Stayhere">Stay here</option>
+                 <option value="togo">to go</option>
+               </select>
+             
+            </div>
+              
+             <br>
+            
+            
+            <div class = "row2"  > 
+              
+
+              <div  class = "row2-column"  style="background-color:#bbb;">
+                    <h3>Ice Creams List</h3>
+                    
+                    
+                    <select class="combo" id="iceCreams"  zize = 10  multiple></select>
+                    <script>
+                       var ice = document.getElementById('iceCreams');
+                      
+                       var span1 =document.getElementById('spanUserName');
+                       async function loadIceCreamCombo(){
+                                   
+                          let response = await fetch("http://localhost:9000/iceCreams/");
+                          if (response.status >= 200 && response.status <= 299){
+                             response = await response.json();
+                             for(let i = 0; i < response.length; i++){
+                                let iceCream = document.createElement("p");
+                                
+                                //iceCream.innerText = "welcome : " + response[i].name   + " "  + response[i].id;
+                                //container.appendChild(iceCream);
+                                let str = ' ' +  '<option value= "' + response[i].id + '" > ' + response[i].name + ' </option>';
+                                ice.innerHTML = ice.innerHTML + ' '  + str;
+                             }      
+                          }
+                           
+                          let personName = sessionStorage.getItem("userName");
+                          
+                           span1.innerText = personName
+                            //sen1.innerText = personName;
+                        }
+                          
+                     
+                       loadIceCreamCombo();
+                    </script>
+              </div>
+              <div  class = "row2-column" style="background-color:#bbb;">
+                    <h3>Drinks List</h3>
+                    <select class="combo" id="drinks"  zize = 10  multiple></select>
+                    <script>
+                       var drink = document.getElementById('drinks');
+                       async function loadDrinkCombo(){
+                                   
+                          let response1 = await fetch("http://localhost:9000/drinks/");
+                          if (response1.status >= 200 && response1.status <= 299){
+                             response1 = await response1.json();
+                             for(let i = 0; i < response1.length; i++){
+                                //let iceCream = document.createElement("p");
+                                //iceCream.innerText = "welcome : " + response[i].name   + " "  + response[i].id;
+                                //container.appendChild(iceCream);
+                                let str = ' ' +  '<option value= "' + response1[i].id + '" > ' + response1[i].name + ' </option>';
+                                drink.innerHTML = drink.innerHTML + ' '  + str;
+                             }      
+                          }
+                        }
+                        loadDrinkCombo();
+                    </script>    
+              </div>
+             
+             </div>
+
+          </div>
+
+
+          <div class="column"  style="background-color:#bbb;">
+             <h2>Order details</h2>
+             <label for="orderNumber">Order Number:</label>
+             <input type="text" id="orderNumber" name="orderNumber" disabled>
+             <label for="orderDate">Date:</label>
+             <input type="text" id="orderDate" name="orderDate" disabled>
+             <table id ="table">
+               <tr>
+                 <th>Item#</th>
+                 <th>item name</th>
+                 <th>item amount</th>
+               </tr>
+            
+            </table>
+
+            <p>Amount : <span id=amountSpan></span> </p>
+            <p>Tax : <span id=taxSpan></span> </p>
+            <p>totalAmount : <span id=totalAmountSpan></span> </p>
+
+            <div class="row2"  style="background-color:#aaa;">
+              <button class ="button" id="newOrder"  width="15">New Order</button>
+              <button class ="button" id="saveOrderButton"  width="15">Save Order</button>
+              <button class ="button" id="cancelButton"  width="15">Cancel Order</button>
+                            
+              <input type="hidden" id="productName" name="productName">
+              <inputtype="hidden" id="productAmount" name="productAmount">
+  
+          </div>
+          <a href="index.html"> Go Back </a>
+
+          </div>
+        </div>
+        
+        <script src = cashier.js></script>;
+        
+    </body>
+</html>
